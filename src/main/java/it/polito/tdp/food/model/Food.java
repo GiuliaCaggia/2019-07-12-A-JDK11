@@ -5,7 +5,6 @@ public class Food {
 	private String display_name;
 	
 	public Food(Integer food_code, String display_name) {
-		super();
 		this.food_code = food_code;
 		this.display_name = display_name;
 	}
