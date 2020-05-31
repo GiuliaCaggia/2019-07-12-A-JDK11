@@ -136,7 +136,7 @@ public class FoodDao {
 	
 	public List<CoppiaCibi> getCoppie(){
 		
-		String sql = "SELECT f1.food_code as f1, f2.food_code as f2, AVG(c1.condiment_calories) as peso FROM condiment c1, condiment c2, food_condiment f1, food_condiment f2 WHERE f1.food_code <> f2.food_code AND c1.condiment_code = f1.condiment_code AND c2.condiment_code = f2.condiment_code AND c1.condiment_code = c2.condiment_code GROUP BY f1.food_code, f2.food_code";
+		String sql = "SELECT f1.food_code as f1, f2.food_code as f2, AVG(c1.condiment_calories) as peso FROM condiment c1, condiment c2, food_condiment f1, food_condiment f2 WHERE f1.food_code > f2.food_code AND c1.condiment_code = f1.condiment_code AND c2.condiment_code = f2.condiment_code AND c1.condiment_code = c2.condiment_code GROUP BY f1.food_code, f2.food_code";
 		List<CoppiaCibi> coppie = new ArrayList<>();
 		
 		try {
@@ -149,7 +149,7 @@ public class FoodDao {
 
 			while (res.next()) {
 				try {
-					CoppiaCibi c = new CoppiaCibi(res.getInt("f1"),res.getInt("f2"),res.getInt("peso"));
+					CoppiaCibi c = new CoppiaCibi(res.getInt("f1"),res.getInt("f2"),res.getDouble("peso"));
 					coppie.add(c);
 				} catch (Throwable t) {
 					t.printStackTrace();

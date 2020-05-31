@@ -55,7 +55,7 @@ public class Model {
 		// ingredienti in comune
 		coppie = dao.getCoppie();
 		for (CoppiaCibi c : coppie) {
-			if (grafo.containsVertex(idMap.get(c.getF1())) && grafo.containsVertex(idMap.get(c.getF2()))) {
+			if (c.getPeso() != 0 && grafo.containsVertex(idMap.get(c.getF1())) && grafo.containsVertex(idMap.get(c.getF2()))) {
 				Graphs.addEdgeWithVertices(grafo, idMap.get(c.getF1()), idMap.get(c.getF2()), c.getPeso());
 			}
 		}
@@ -64,29 +64,16 @@ public class Model {
 
 	public List<CoppiaCibi> getAdiacenti(Food selezionato) {
 
-		List<Food> adiacenti = new ArrayList<>(cibi);
-		List<CoppiaCibi> massimeCalorie = new ArrayList<>();
 		List<CoppiaCibi> risultato = new ArrayList<>();
 
-		for (Food food : grafo.vertexSet()) {
-			if (grafo.containsVertex(selezionato) && grafo.containsEdge(grafo.getEdge(selezionato, food))) {
-				adiacenti = Graphs.neighborListOf(grafo, selezionato);
-
-				for (Food f : adiacenti) {
-					massimeCalorie.add(new CoppiaCibi(selezionato.getFood_code(), f.getFood_code(),
-							(int) grafo.getEdgeWeight(grafo.getEdge(selezionato, f))));
-
-				}
-
-			}
+		List<Food> vicini = Graphs.neighborListOf(this.grafo, selezionato);
+		
+		for(Food v: vicini) {
+			Double calorie =  this.grafo.getEdgeWeight(this.grafo.getEdge(selezionato, v));
+			risultato.add(new CoppiaCibi(selezionato.getFood_code(), v.getFood_code(), calorie));
 		}
-
-		Collections.sort(massimeCalorie);
-
-		for (int i = 0; i < 5; i++) {
-			risultato.add(massimeCalorie.get(i));
-		}
-
+		
+		Collections.sort(risultato);
 		return risultato;
 
 	}

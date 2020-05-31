@@ -86,17 +86,16 @@ public class FoodController {
 		
 		List<CoppiaCibi> cibi = model.getAdiacenti(this.boxFood.getValue());
 		
-		if(cibi == null) {
+		if(this.boxFood.getValue() == null) {
 			this.txtResult.appendText("seleziona cibo!");
 			return;
 		}
 		
 		System.out.println(cibi);
 		
-		for(CoppiaCibi c: cibi) {
-			this.txtResult.appendText(idMap.get(c.getF2())+" "+c.getPeso()+"\n");
-		}
-		
+		for(int i = 0; i<5 && i<cibi.size();i++){
+			this.txtResult.appendText(String.format("%s %f\n", idMap.get(cibi.get(i).getF1()).getDisplay_name(),cibi.get(i).getPeso()));
+				}
 	}
 
 	@FXML

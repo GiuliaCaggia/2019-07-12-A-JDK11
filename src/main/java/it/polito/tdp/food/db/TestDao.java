@@ -6,12 +6,14 @@ public class TestDao {
 		FoodDao dao = new FoodDao();
 		
 		System.out.println("Printing all the condiments...");
-		System.out.println(dao.listAllCondiments());
+		//System.out.println(dao.listAllCondiments());
 		
 		System.out.println("Printing all the foods...");
 		
 		System.out.println("Printing all the portions...");
-		System.out.println(dao.listAllPortions());
+		//System.out.println(dao.listAllPortions());
+		
+		System.out.println(dao.getCoppie());
 	}
 
 }
