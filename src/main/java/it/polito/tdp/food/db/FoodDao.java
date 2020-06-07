@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import it.polito.tdp.food.model.Condiment;
+import it.polito.tdp.food.model.CoppiaCibi;
 import it.polito.tdp.food.model.Food;
 import it.polito.tdp.food.model.Portion;
 

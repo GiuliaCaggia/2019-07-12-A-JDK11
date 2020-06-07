@@ -13,7 +13,7 @@ public class TestDao {
 		System.out.println("Printing all the portions...");
 		//System.out.println(dao.listAllPortions());
 		
-		System.out.println(dao.getCoppie());
+		System.out.println(dao.getFoodPortion(6));
 	}
 
 }

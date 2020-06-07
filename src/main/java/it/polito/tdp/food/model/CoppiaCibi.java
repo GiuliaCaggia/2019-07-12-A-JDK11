@@ -1,4 +1,4 @@
-package it.polito.tdp.food.db;
+package it.polito.tdp.food.model;
 
 public class CoppiaCibi implements Comparable<CoppiaCibi>{
 

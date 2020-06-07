@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import it.polito.tdp.food.db.CoppiaCibi;
+import it.polito.tdp.food.model.CoppiaCibi;
 import it.polito.tdp.food.model.Food;
 import it.polito.tdp.food.model.Model;
 import javafx.event.ActionEvent;
@@ -94,14 +94,34 @@ public class FoodController {
 		System.out.println(cibi);
 		
 		for(int i = 0; i<5 && i<cibi.size();i++){
-			this.txtResult.appendText(String.format("%s %f\n", idMap.get(cibi.get(i).getF1()).getDisplay_name(),cibi.get(i).getPeso()));
+			this.txtResult.appendText(String.format("%s %f\n", idMap.get(cibi.get(i).getF2()).getDisplay_name(),cibi.get(i).getPeso()));
 				}
 	}
 
 	@FXML
 	void doSimula(ActionEvent event) {
 		txtResult.clear();
-		txtResult.appendText("Simulazione...");
+		
+		Food cibo = this.boxFood.getValue();
+		
+		if(cibo == null) {
+			this.txtResult.appendText("ERRORE: devi selezionare un cibo!");
+			return;
+		}
+		int k = 0;
+		try {
+		k = Integer.parseInt(this.txtK.getText());
+		}catch(NumberFormatException e) {
+			this.txtResult.appendText("Inserisci un k valido!");
+			return;
+		}
+		
+		if(k < 1 || k > 10) {
+			this.txtResult.appendText("Inserisci un k valido! (tra 1 e 10)");
+			return;
+		}
+		
+		this.txtResult.appendText(model.simula(cibo, k));
 	}
 
 	@FXML // This method is called by the FXMLLoader when initialization is complete

@@ -11,7 +11,6 @@ import org.jgrapht.Graphs;
 import org.jgrapht.graph.DefaultWeightedEdge;
 import org.jgrapht.graph.SimpleWeightedGraph;
 
-import it.polito.tdp.food.db.CoppiaCibi;
 import it.polito.tdp.food.db.FoodDao;
 
 public class Model {
@@ -20,10 +19,9 @@ public class Model {
 	 * il numero di porzioni diverse (portion_id) con cui quel cibo è rappresentato,
 	 * Ad esempio se Porzioni = 1, si considerino solo i cibi che siano rpesenti con
 	 * una sola porzione. se Porzioni uguale a 3, si considerino i cibi preseti con
-	 * 1 2 o 3 porzioni.
-	 * 
-	 * 
+	 * 1 2 o 3 porzioni. 
 	 */
+	
 	FoodDao dao;
 	List<Food> cibi;
 	Map<Integer, Food> idMap;
@@ -42,8 +40,10 @@ public class Model {
 	}
 
 	public void creaGrafo() {
+		
 		grafo = new SimpleWeightedGraph<>(DefaultWeightedEdge.class);
 
+		
 		// aggiungo i vertici
 		for (Food f : cibi)
 			grafo.addVertex(f);
@@ -55,7 +55,8 @@ public class Model {
 		// ingredienti in comune
 		coppie = dao.getCoppie();
 		for (CoppiaCibi c : coppie) {
-			if (c.getPeso() != 0 && grafo.containsVertex(idMap.get(c.getF1())) && grafo.containsVertex(idMap.get(c.getF2()))) {
+			if (c.getPeso() != 0 && grafo.containsVertex(idMap.get(c.getF1()))
+					&& grafo.containsVertex(idMap.get(c.getF2()))) {
 				Graphs.addEdgeWithVertices(grafo, idMap.get(c.getF1()), idMap.get(c.getF2()), c.getPeso());
 			}
 		}
@@ -67,12 +68,12 @@ public class Model {
 		List<CoppiaCibi> risultato = new ArrayList<>();
 
 		List<Food> vicini = Graphs.neighborListOf(this.grafo, selezionato);
-		
-		for(Food v: vicini) {
-			Double calorie =  this.grafo.getEdgeWeight(this.grafo.getEdge(selezionato, v));
+
+		for (Food v : vicini) {
+			Double calorie = this.grafo.getEdgeWeight(this.grafo.getEdge(selezionato, v));
 			risultato.add(new CoppiaCibi(selezionato.getFood_code(), v.getFood_code(), calorie));
 		}
-		
+
 		Collections.sort(risultato);
 		return risultato;
 
@@ -93,15 +94,29 @@ public class Model {
 	public Graph<Food, DefaultWeightedEdge> getGrafo() {
 		return grafo;
 	}
+	
+	public String simula(Food cibo, int k) {
+		Simulator sim = new Simulator(this.grafo,this, this.getIdMap());
+		sim.setK(k);
+		sim.init(cibo);
+		sim.run();
+		
+		String result = String.format("Preparati %d cibi in %f minuti", sim.getNumTotCibi(),sim.getTempoPreparazione());
+		
+		return result;
+		
+	}
 
 	public static void main(String[] args) {
 		Model model = new Model();
 
-		model.getFoodPortion(1000);
+		List<Food> cibi = model.getFoodPortion(1000);
 
+		Map<Integer, Food> idMap = model.getIdMap();
+		
 		model.creaGrafo();
 
-		System.out.println(model.getAdiacenti(new Food(23559, "Ground beef (95% lean)")));
+		System.out.println(model.grafo.vertexSet());
 	}
 
 }
